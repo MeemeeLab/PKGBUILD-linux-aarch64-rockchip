@@ -4,11 +4,11 @@
 buildarch=8
 
 pkgbase=linux-aarch64-rockchip
-_srcname=linux-6.7
+_srcname=linux-6.8
 _kernelname=${pkgbase#linux}
 _desc="AArch64 multi-platform"
-pkgver=6.7.9
-pkgrel=1
+pkgver=6.8.1
+pkgrel=2
 arch=('aarch64')
 url="http://www.kernel.org/"
 license=('GPL2')
@@ -20,11 +20,11 @@ source=("http://www.kernel.org/pub/linux/kernel/v6.x/${_srcname}.tar.xz"
         '0002-arm64-dts-rockchip-disable-pwm0-on-rk3399-firefly.patch'
         'config'
         'linux.preset')
-md5sums=('7861a2ed9d33c0694df738203532b715'
-         '5b31116070986a56ee2747daf53ca48c'
+md5sums=('72d623b959a11850b57406f0b9fe3946'
+         '17b3e8600c931a4abf864c56e1ffd8db'
          '7b08a199a97e3e2288e5c03d8e8ded2d'
          'c9d4e392555b77034e24e9f87c5ff0b3'
-         'be851c176e43f47975efbed5a5989d67'
+         '1da5d674b68109a21bd7fb39488d3e0b'
          '41cb5fef62715ead2dd109dbea8413d6')
 
 prepare() {
@@ -91,10 +91,10 @@ _package() {
   sed "${_subst}" ../linux.preset |
     install -Dm644 /dev/stdin "${pkgdir}/etc/mkinitcpio.d/${pkgbase}.preset"
 
-  # rather than use another hook (90-linux.hook) rely on kmod's 90-mkinitcpio-install.hook
+  # rather than use another hook (90-linux.hook) rely on mkinitcpio's 90-mkinitcpio-install.hook
   # which avoids a double run of mkinitcpio that can occur
-  install -d "${pkgdir}/usr/lib/firmware/"
-  touch "${pkgdir}/usr/lib/firmware/$(<version)"
+  install -d "${pkgdir}/usr/lib/initcpio/"
+  echo "dummy file to trigger mkinitcpio to run" > "${pkgdir}/usr/lib/initcpio/$(<version)"
 }
 
 _package-headers() {
