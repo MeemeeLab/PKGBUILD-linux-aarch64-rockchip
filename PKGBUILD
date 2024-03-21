@@ -3,7 +3,7 @@
 
 buildarch=8
 
-pkgbase=linux-aarch64-rockchip
+pkgbase=linux-aarch64-rk3588
 _srcname=linux-6.8
 _kernelname=${pkgbase#linux}
 _desc="AArch64 multi-platform"
@@ -16,15 +16,19 @@ makedepends=('xmlto' 'docbook-xsl' 'kmod' 'inetutils' 'bc' 'git' 'uboot-tools' '
 options=('!strip')
 source=("http://www.kernel.org/pub/linux/kernel/v6.x/${_srcname}.tar.xz"
         "http://www.kernel.org/pub/linux/kernel/v6.x/patch-${pkgver}.xz"
+        'rk3588-upstream-enablement.diff'
+        'rk3588s-orangepi-5.diff'
         '0001-net-smsc95xx-Allow-mac-address-to-be-set-as-a-parame.patch'
         '0002-arm64-dts-rockchip-disable-pwm0-on-rk3399-firefly.patch'
         'config'
         'linux.preset')
 md5sums=('72d623b959a11850b57406f0b9fe3946'
          '17b3e8600c931a4abf864c56e1ffd8db'
+         '381dc12968381b7f874a23aa447e57a4'
+         'f4cffee49931a8354173a09d327d1b35'
          '7b08a199a97e3e2288e5c03d8e8ded2d'
          'c9d4e392555b77034e24e9f87c5ff0b3'
-         '1da5d674b68109a21bd7fb39488d3e0b'
+         '53cacd74d7defcb7b82023263b61ffdd'
          '41cb5fef62715ead2dd109dbea8413d6')
 
 prepare() {
@@ -40,6 +44,10 @@ prepare() {
   # ALARM patches
   git apply ../0001-net-smsc95xx-Allow-mac-address-to-be-set-as-a-parame.patch
   git apply ../0002-arm64-dts-rockchip-disable-pwm0-on-rk3399-firefly.patch
+
+  # rk3588 enablement
+  git apply ../rk3588-upstream-enablement.diff
+  git apply ../rk3588s-orangepi-5.diff
 
   cat "${srcdir}/config" > ./.config
 }
